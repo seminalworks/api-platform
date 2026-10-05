@@ -20,6 +20,7 @@ import { lazy, type ReactNode } from 'react';
 import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import { GetStartedPage } from '@/vision/activation/GetStartedPage';
+import { AllApisPage } from '@/vision/inventory/AllApisPage';
 
 import { AuthCallbackPage } from '@/pages/auth/AuthCallbackPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
@@ -405,6 +406,7 @@ export function AppRoutes({ extensions = [] }: AppRoutesProps) {
           <Route path="/" element={<OrganizationRedirectPage />} />
           <Route path={routes.organizations} element={<OrganizationRedirectPage />} />
           <Route path={routes.organizationHome()} element={<OrganizationHomePage />} />
+          <Route path={routes.allApis()} element={<AllApisPage />} />
           <Route path={routes.projects()} element={<ProjectListPage />} />
           <Route path={`${routes.gateways()}/*`} element={<GatewaysRoute />} />
           {/*

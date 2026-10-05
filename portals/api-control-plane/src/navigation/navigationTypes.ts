@@ -32,6 +32,8 @@ export type NavigationDefinition = {
   icon: ReactNode;
   id: string;
   isVisible?: (scope: ConsoleScope) => boolean;
+  /** Vision: kept for page titles, but not rendered in the sidebar. */
+  hidden?: boolean;
   label: string;
   /**
    * Extensions only, where it decides the URL shape of the injected page (see

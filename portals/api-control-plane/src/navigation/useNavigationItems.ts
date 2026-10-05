@@ -226,6 +226,7 @@ export const useNavigationItems = (): NavigationItem[] => {
       definition: NavigationDefinition
     ): NavigationItem | undefined => {
       if (!isFeatureEnabled(definition)) return undefined;
+      if (definition.hidden) return undefined;
       if (!(definition.isVisible?.(scope) ?? true)) return undefined;
 
       const to = definition.to(scope);

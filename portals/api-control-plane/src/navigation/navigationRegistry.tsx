@@ -35,6 +35,7 @@ import {
   ShieldCheck,
   FlaskConical,
   Box,
+  Boxes,
 } from '@wso2/oxygen-ui-icons-react';
 
 import type { ApiCapabilities } from '../pages/appShell/appShellPages/apis/utils/apiCapabilities';
@@ -261,28 +262,34 @@ const apiCapability =
 
 export const navigationRegistry: NavigationDefinition[] = [
   {
+    // Vision: Home is always the organization. Scope no longer reshapes the
+    // sidebar; you reach an API through the APIs inventory instead.
     id: 'overview',
-    label: 'Overview',
+    label: 'Home',
     group: CLUSTER.place,
     order: 10,
     icon: <Home />,
-    // The summary of wherever you are. Opening a project or an API navigates
-    // into a deeper tier of this same item rather than to a different one.
-    ...adaptive([
-      { level: 'api', to: routes.api },
-      { level: 'project', to: routes.projectHome },
-      { level: 'organization', to: routes.organizationHome },
-    ]),
+    to: orgLevelTo(routes.organizationHome),
+    match: matchRoutes(routes.organizationHome()),
+  },
+  {
+    // Vision: inventory-first. Every API in the organization, filterable by
+    // project, and the way into each API's own tabs.
+    id: 'apis',
+    label: 'APIs',
+    group: CLUSTER.place,
+    order: 15,
+    icon: <Boxes />,
+    to: orgLevelTo(routes.allApis),
+    match: (pathname: string) =>
+      pathname.endsWith('/apis') || /\/projects\/[^/]+\/apis\//.test(pathname),
   },
   {
     id: 'projects',
     label: 'Projects',
     group: CLUSTER.place,
-    order: 20,
+    order: 40,
     icon: <Box />,
-    // Inside a project this is redundant with Overview, and switching projects
-    // is the header switcher's job.
-    isVisible: ({ isProjectScope }) => !isProjectScope,
     to: orgLevelTo(routes.projects),
     match: matchRoutes(routes.projects(), routes.projectHome()),
   },
@@ -299,6 +306,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'develop',
     label: 'Develop',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 35,
     icon: <Code />,
     isVisible: apiCapability(({ canDevelop }) => canDevelop),
@@ -327,6 +336,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'test',
     label: 'Test',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 40,
     icon: <FlaskConical />,
     isVisible: apiCapability(({ canTest }) => canTest),
@@ -339,6 +350,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'deploy',
     label: 'Deploy',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 50,
     icon: <Rocket />,
     isVisible: apiCapability(({ canDeploy }) => canDeploy),
@@ -352,6 +365,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'insights',
     label: 'Insights',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 60,
     icon: <ChartColumn />,
     ...submenu([
@@ -373,6 +388,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'observability',
     label: 'Observability',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 70,
     icon: <Activity />,
     ...submenu([
@@ -398,6 +415,8 @@ export const navigationRegistry: NavigationDefinition[] = [
     id: 'publish',
     label: 'Publish',
     group: CLUSTER.api,
+    // Vision: an API tab, not a sidebar destination.
+    hidden: true,
     order: 55,
     icon: <Megaphone />,
     to: apiLevelTo(routes.apiPortals),

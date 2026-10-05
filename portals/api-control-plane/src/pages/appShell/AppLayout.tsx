@@ -36,6 +36,9 @@ import { AppHeader } from './AppHeader';
 import { APP_FOOTER_ID } from './appLayoutConstants';
 import { AppSidebar } from './AppSidebar';
 import { FormattedMessage } from 'react-intl';
+import { SetupGuide } from '../../vision/activation/SetupGuide';
+import { DemoPanel } from '../../vision/demo/DemoPanel';
+import { ApiTabs } from '../../vision/inventory/ApiTabs';
 
 export default function AppLayout() {
   const navigate = useNavigate();
@@ -81,6 +84,13 @@ export default function AppLayout() {
             padding. The fallbacks stand in for a page, so they bring one of
             their own. */}
           <Box sx={{ minWidth: 0, width: '100%', p: 1 }}>
+            {params.orgHandle && params.projectHandler && params.apiHandler && (
+              <ApiTabs
+                apiHandler={params.apiHandler}
+                orgHandle={params.orgHandle}
+                projectHandler={params.projectHandler}
+              />
+            )}
             {/* Error boundary scoped to routed page only; resets on pathname change */}
             <ErrorBoundary
               fallback={(error, reset) => <PageErrorFallback error={error} reset={reset} />}
@@ -146,6 +156,8 @@ export default function AppLayout() {
           </NotificationPanel>
         </AppShell.NotificationPanel>
       </AppShell>
+      <SetupGuide />
+      <DemoPanel />
     </PortProvider>
   );
 }

@@ -57,6 +57,7 @@ import { useConsoleScope } from '@/scope/ConsoleScopeProvider';
 import { relativeTime } from '@/utils/relativeTime';
 import ExploreMoreCard from './components/ExploreMoreCard';
 import { Can } from '@/permissions/Can';
+import { ActivationHero } from '@/vision/activation/SetupGuide';
 
 const messages = defineMessages({
   apiAction: {
@@ -376,6 +377,8 @@ function OrganizationHomePageContent() {
             <FormattedMessage {...messages.bannerDescription} />
           </Typography>
         </Box>
+
+        <ActivationHero />
 
         <Grid container spacing={2}>
           <Grid size={{ md: 4, xs: 12 }}>

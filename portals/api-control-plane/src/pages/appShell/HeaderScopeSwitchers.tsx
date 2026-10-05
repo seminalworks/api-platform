@@ -51,6 +51,8 @@ const TRUNCATED_OPTION_TEXT_SLOT_PROPS = {
  * would drag `useConsoleScope()` up with it and put the throw back outside the
  * boundary.
  */
+const SHOW_SCOPE_STRATA = false as boolean;
+
 export function HeaderScopeSwitchers() {
   const navigate = useNavigate();
   const intl = useIntl();
@@ -175,6 +177,9 @@ export function HeaderScopeSwitchers() {
             sx={SWITCHER_SELECT_SX}
           />
 
+      {/* Vision: project and API live in the page (filters, breadcrumb, tabs),
+          not as a second navigation stratum in the header. */}
+      {SHOW_SCOPE_STRATA && <>
       {params.projectHandler && (
         <Box sx={{position: 'relative'}}>
           <SearchableComplexSelect
@@ -332,6 +337,7 @@ export function HeaderScopeSwitchers() {
           }}
         />
       )}
+      </>}
     </Header.Switchers>
   );
 }
