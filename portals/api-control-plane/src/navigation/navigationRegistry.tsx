@@ -36,7 +36,9 @@ import {
   FlaskConical,
   Box,
   Boxes,
+  Sparkles,
 } from '@wso2/oxygen-ui-icons-react';
+import { demoStore } from '../vision/demo/demoStore';
 
 import type { ApiCapabilities } from '../pages/appShell/appShellPages/apis/utils/apiCapabilities';
 import {
@@ -421,6 +423,18 @@ export const navigationRegistry: NavigationDefinition[] = [
     icon: <Megaphone />,
     to: apiLevelTo(routes.apiPortals),
     match: matchRoutes(...apiScopedPaths(routes.apiPortals), routes.apiPortalPublish()),
+  },
+  {
+    // Vision: a temporary way back into the standalone Quick Start, gone once
+    // the first API is live.
+    id: 'quickstart',
+    label: 'Quick start',
+    group: CLUSTER.global,
+    order: 90,
+    icon: <Sparkles />,
+    isVisible: () => !demoStore.get().activation.firstCallConfirmed,
+    to: orgLevelTo(routes.getStarted),
+    match: matchRoutes(routes.getStarted()),
   },
   {
     // The one page with no scope requirement at all, hence its own cluster.

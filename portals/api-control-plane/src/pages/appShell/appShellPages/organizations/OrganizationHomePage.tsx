@@ -327,6 +327,9 @@ function OrganizationHomePageContent() {
   }, [search, sortedProjects]);
 
   const createApi = () => {
+    // Vision: the in-product popover, not the nested wizard page.
+    navigate(`${routes.allApis(orgHandle)}?create=1`);
+    return;
     if (sortedProjects.length === 1) {
       navigate(routes.newApi(orgHandle, sortedProjects[0].id));
       return;

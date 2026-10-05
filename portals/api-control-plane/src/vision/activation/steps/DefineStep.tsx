@@ -89,9 +89,14 @@ const METHOD_COLOR: Record<string, 'success' | 'info' | 'warning' | 'error' | 'd
 export function DefineStep({
   project,
   onCreated,
+  variant = 'page',
+  onCancel,
 }: {
   project?: Project;
   onCreated: (ids: { apiId: string; projectId: string }) => void;
+  /** `modal`: the in-product popover — no step header, footer actions. */
+  variant?: 'page' | 'modal';
+  onCancel?: () => void;
 }) {
   const [kind, setKind] = useState<SourceKind>('sample');
   const [name, setName] = useState('Reading List');
@@ -207,11 +212,17 @@ export function DefineStep({
   return (
     <Stack direction={{ xs: 'column', lg: 'row' }} spacing={5} sx={{ alignItems: 'flex-start' }}>
       <Stack spacing={3} sx={{ flex: 1, minWidth: 0, maxWidth: 620 }}>
-        <StepHeader
-          eyebrow="Step 1"
-          title="What should your API connect to?"
-          subtitle="Pick a starting point. You can change everything later."
-        />
+        {variant === 'page' ? (
+          <StepHeader
+            eyebrow="Step 1"
+            title="What should your API connect to?"
+            subtitle="Pick a starting point. You can change everything later."
+          />
+        ) : (
+          <Typography color="text.secondary" variant="body2">
+            Pick a starting point. You can change everything later.
+          </Typography>
+        )}
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
           {SOURCES.map((source) => {
@@ -335,17 +346,26 @@ export function DefineStep({
           {error && <Alert severity="error">{error}</Alert>}
         </Stack>
 
-        <Box>
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ justifyContent: variant === 'modal' ? 'flex-end' : 'flex-start' }}
+        >
+          {onCancel && (
+            <Button onClick={onCancel} variant="text">
+              Cancel
+            </Button>
+          )}
           <Button
             disabled={!canCreate || busy}
             onClick={create}
-            size="large"
+            size={variant === 'modal' ? 'medium' : 'large'}
             startIcon={busy ? <CircularProgress color="inherit" size={16} /> : undefined}
             variant="contained"
           >
             {busy ? 'Creating…' : 'Create API'}
           </Button>
-        </Box>
+        </Stack>
       </Stack>
 
       <Box

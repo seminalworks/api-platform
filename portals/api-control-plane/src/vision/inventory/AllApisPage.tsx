@@ -17,25 +17,16 @@
  */
 
 import { useState } from 'react';
-import {
-  Box,
-  Button,
-  Chip,
-  Dialog,
-  DialogContent,
-  IconButton,
-  Stack,
-  Typography,
-} from '@wso2/oxygen-ui';
-import { Plus, X } from '@wso2/oxygen-ui-icons-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Button, Chip, Stack, Typography } from '@wso2/oxygen-ui';
+import { Plus } from '@wso2/oxygen-ui-icons-react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { AppPage } from '@/components/AppPage';
 import { useProjects, type Project } from '@/api/resources/projects';
 import { useAllRestApis } from '@/api/resources/restApis';
 import { routes } from '@/routes/paths';
 import { useDemoState } from '../demo/demoStore';
-import { DefineStep } from '../activation/steps/DefineStep';
+import { CreateApiDialog } from '../activation/CreateApiDialog';
 
 /**
  * Vision: every API in the organization in one inventory. Projects filter the
@@ -48,7 +39,8 @@ export function AllApisPage() {
   const projectsQuery = useProjects();
   const projects = projectsQuery.data?.list ?? [];
   const [filter, setFilter] = useState<string>('all');
-  const [modalOpen, setModalOpen] = useState(false);
+  const [search] = useSearchParams();
+  const [modalOpen, setModalOpen] = useState(search.get('create') === '1');
 
   const visible = filter === 'all' ? projects : projects.filter((project) => project.id === filter);
 
@@ -114,24 +106,7 @@ export function AllApisPage() {
         </Box>
       </Stack>
 
-      <Dialog fullWidth maxWidth="lg" onClose={() => setModalOpen(false)} open={modalOpen}>
-        <IconButton
-          aria-label="Close"
-          onClick={() => setModalOpen(false)}
-          sx={{ position: 'absolute', right: 12, top: 12 }}
-        >
-          <X size={18} />
-        </IconButton>
-        <DialogContent sx={{ p: 4 }}>
-          <DefineStep
-            onCreated={({ apiId, projectId }) => {
-              setModalOpen(false);
-              navigate(routes.api(orgHandle, projectId, apiId));
-            }}
-            project={projects[0]}
-          />
-        </DialogContent>
-      </Dialog>
+      <CreateApiDialog onClose={() => setModalOpen(false)} open={modalOpen} />
     </AppPage>
   );
 }

@@ -46,17 +46,24 @@ export type DemoState = {
   controlPlaneHost: string;
   /** Where a gateway started on this machine serves traffic. */
   localGatewayUrl: string;
+  /** Only meaningful with the classic IA, where steps span many pages. */
+  floatingGuide: boolean;
+  /** Open the standalone Quick Start on an empty org's first visit. */
+  quickStartOnFirstVisit: boolean;
+  quickStartSeen?: boolean;
 };
 
 const STORAGE_KEY = 'vision.demo.v1';
 
 const DEFAULT_STATE: DemoState = {
   panelOpen: false,
-  wizardVariant: 'takeover',
+  wizardVariant: 'modal',
   scenarios: { gateway: 'real', deploy: 'real', firstCall: 'real' },
   activation: {},
   controlPlaneHost: 'host.docker.internal:39243',
   localGatewayUrl: 'https://localhost:38443',
+  floatingGuide: false,
+  quickStartOnFirstVisit: true,
 };
 
 const read = (): DemoState => {
@@ -93,7 +100,8 @@ export const demoStore = {
   },
   setActivation: (patch: Partial<ActivationRecord>) =>
     demoStore.set((current) => ({ ...current, activation: { ...current.activation, ...patch } })),
-  resetActivation: () => demoStore.set((current) => ({ ...current, activation: {} })),
+  resetActivation: () =>
+    demoStore.set((current) => ({ ...current, activation: {}, quickStartSeen: false })),
   subscribe: (listener: () => void) => {
     listeners.add(listener);
     return () => listeners.delete(listener);

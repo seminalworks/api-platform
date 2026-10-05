@@ -47,6 +47,7 @@ import { OverviewTab } from './OverviewTab';
 import { ProgressBanner } from './ProgressBanner';
 import { Can } from '@/permissions/Can';
 import { useCan } from '@/permissions/useCan';
+import { ApiQuickstart } from '@/vision/activation/ApiQuickstart';
 
 const messages = defineMessages({
   context: {
@@ -376,9 +377,11 @@ function ApiDetailPageContent() {
             </Can>
           </Stack>
         </Box>
-        {/* Vision: the floating setup guide replaces the per-API stepper. */}
+        {/* Vision: the quickstart card below replaces the per-API stepper. */}
         {SHOW_LEGACY_STEPPER && <ProgressBanner api={api} deployed={deployedGateways.length > 0} />}
       </Card>
+
+      <ApiQuickstart api={api} />
 
       <OverviewTab
         api={api}

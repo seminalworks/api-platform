@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -47,7 +47,7 @@ export function SetupGuide() {
   const activation = useActivation();
   const [expanded, setExpanded] = useState(false);
 
-  if (demo.activation.guideDismissed || activation.isLoading) return null;
+  if (!demo.floatingGuide || demo.activation.guideDismissed || activation.isLoading) return null;
 
   const done = activation.completed === activation.total;
   const open = (step?: string) =>
@@ -161,45 +161,81 @@ function ProgressRing({ value }: { value: number }) {
   );
 }
 
-/** Home-page entry point while activation is incomplete. */
+/**
+ * Home-page stepper banner (Stripe's "Continue activating"), shown only until
+ * activation. It points at where the work actually is: the create popover
+ * first, then the API's own quickstart card.
+ */
 export function ActivationHero() {
   const { orgHandle = '' } = useParams();
   const navigate = useNavigate();
   const activation = useActivation();
+  const demo = useDemoState();
+
+  // The standalone Quick Start greets an empty organization once, as it would
+  // at sign-up; after that it's opt-in from here or the sidebar.
+  const isEmpty = !activation.isLoading && !activation.api;
+  useEffect(() => {
+    if (!isEmpty || !demo.quickStartOnFirstVisit || demo.quickStartSeen) return;
+    demoStore.set((state) => ({ ...state, quickStartSeen: true }));
+    navigate(routes.getStarted(orgHandle));
+  }, [isEmpty, demo.quickStartOnFirstVisit, demo.quickStartSeen, navigate, orgHandle]);
+
   if (activation.isLoading || activation.completed === activation.total) return null;
-  const started = activation.completed > 0;
+
+  const nextIndex = activation.steps.findIndex((step) => !step.complete);
+  const resume = () => {
+    if (!activation.api?.id || !activation.project?.id) {
+      navigate(`${routes.allApis(orgHandle)}?create=1`);
+      return;
+    }
+    navigate(routes.api(orgHandle, activation.project.id, activation.api.id));
+  };
 
   return (
-    <Paper
-      sx={{
-        alignItems: { md: 'center' },
-        border: 1,
-        borderColor: 'divider',
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        gap: 2,
-        p: 3,
-      }}
-      variant="outlined"
-    >
-      <Box sx={{ flex: 1 }}>
-        <Typography sx={{ fontWeight: 700 }} variant="h6">
-          {started ? 'Finish getting your first API live' : 'Get your first API live'}
-        </Typography>
-        <Typography color="text.secondary" variant="body2">
-          {started
-            ? `${activation.completed} of ${activation.total} done. Next: ${activation.nextStep?.label.toLowerCase()}.`
-            : 'Four short steps, about five minutes: define an API, connect a gateway, deploy, and make your first call.'}
-        </Typography>
-      </Box>
-      <Button
-        endIcon={<ArrowRight size={16} />}
-        onClick={() => navigate(routes.getStarted(orgHandle))}
-        size="large"
-        variant="contained"
-      >
-        {started ? 'Continue' : 'Start'}
-      </Button>
+    <Paper sx={{ border: 1, borderColor: 'divider', p: 3 }} variant="outlined">
+      <Typography sx={{ fontWeight: 700 }} variant="h5">
+        {activation.completed === 0 ? 'Get your first API live' : 'Continue getting your first API live'}
+      </Typography>
+      <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', my: 2, maxWidth: 640 }}>
+        {activation.steps.map((step, index) => (
+          <Stack direction="row" key={step.key} spacing={0.75} sx={{ alignItems: 'center', flex: index < activation.steps.length - 1 ? 1 : '0 0 auto' }}>
+            <Box
+              sx={{
+                alignItems: 'center',
+                bgcolor: step.complete ? 'primary.main' : index === nextIndex ? 'transparent' : 'action.disabledBackground',
+                border: index === nextIndex ? 2 : 0,
+                borderColor: 'primary.main',
+                borderRadius: '50%',
+                color: step.complete ? 'primary.contrastText' : 'text.secondary',
+                display: 'flex',
+                flexShrink: 0,
+                fontSize: 12,
+                fontWeight: 700,
+                height: 24,
+                justifyContent: 'center',
+                width: 24,
+              }}
+            >
+              {step.complete ? <Check size={13} strokeWidth={3} /> : index + 1}
+            </Box>
+            {index < activation.steps.length - 1 && (
+              <Box sx={{ bgcolor: step.complete ? 'primary.main' : 'divider', borderRadius: 1, flex: 1, height: 4 }} />
+            )}
+          </Stack>
+        ))}
+      </Stack>
+      <Typography sx={{ mb: 2 }} variant="body1">
+        <strong>Step {nextIndex + 1}:</strong> {activation.nextStep?.label}. {activation.nextStep?.hint}.
+      </Typography>
+      <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+        <Button endIcon={<ArrowRight size={16} />} onClick={resume} variant="contained">
+          {activation.completed === 0 ? 'Create your first API' : 'Continue'}
+        </Button>
+        <Button onClick={() => navigate(routes.getStarted(orgHandle))} variant="text">
+          Prefer a guided walkthrough? Open Quick Start
+        </Button>
+      </Stack>
     </Paper>
   );
 }

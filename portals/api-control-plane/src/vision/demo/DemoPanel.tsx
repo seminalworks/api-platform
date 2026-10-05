@@ -80,7 +80,7 @@ export function DemoPanel() {
       </Stack>
 
       <Typography color="text.secondary" variant="caption">
-        Create flow
+        In-product create flow
       </Typography>
       <ToggleButtonGroup
         exclusive
@@ -92,8 +92,8 @@ export function DemoPanel() {
         sx={{ mb: 1.5, mt: 0.5 }}
         value={demo.wizardVariant}
       >
+        <ToggleButton value="modal">Popover</ToggleButton>
         <ToggleButton value="takeover">Full-page</ToggleButton>
-        <ToggleButton value="modal">Modal</ToggleButton>
       </ToggleButtonGroup>
 
       <Stack spacing={1}>
@@ -140,6 +140,20 @@ export function DemoPanel() {
         sx={{ mt: 1.5 }}
         value={demo.localGatewayUrl}
       />
+
+      <ToggleButtonGroup
+        exclusive
+        fullWidth
+        onChange={(_, value: string | null) =>
+          value && demoStore.set((state) => ({ ...state, floatingGuide: value === 'on' }))
+        }
+        size="small"
+        sx={{ mt: 1.5 }}
+        value={demo.floatingGuide ? 'on' : 'off'}
+      >
+        <ToggleButton value="off">No floating guide</ToggleButton>
+        <ToggleButton value="on">Floating guide (classic IA)</ToggleButton>
+      </ToggleButtonGroup>
 
       <Button
         fullWidth
