@@ -53,7 +53,8 @@ export default ({ mode }: { mode: string }) => {
           plugins: [['formatjs', { ast: true }]],
         },
       }),
-      basicSsl(),
+      // Prototype: plain HTTP so browsers without a cert prompt can load the demo.
+      ...(process.env.VISION_HTTP ? [] : [basicSsl()]),
     ],
     resolve: {
       alias: {
