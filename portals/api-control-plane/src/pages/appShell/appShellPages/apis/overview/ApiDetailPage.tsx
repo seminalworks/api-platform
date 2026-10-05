@@ -238,6 +238,8 @@ function ApiDetailPageContent() {
               minWidth: 0,
             }}
           >
+            {/* Vision: the API header above the tabs already carries identity. */}
+            {SHOW_LEGACY_STEPPER && (
             <Avatar
               sx={{
                 bgcolor: 'primary.light',
@@ -251,11 +253,12 @@ function ApiDetailPageContent() {
             >
               {apiInitials(displayName) || <Boxes size={AVATAR_ICON_SIZE} />}
             </Avatar>
+            )}
 
             <Stack spacing={1.5} sx={{ minWidth: 0 }}>
               {/* Identity: name, version, lifecycle, and whether this console
                   may edit the API at all. */}
-              <Stack alignItems="flex-start" spacing={1}>
+              <Stack alignItems="flex-start" spacing={1} sx={{ display: SHOW_LEGACY_STEPPER ? 'flex' : 'none' }}>
                 <Stack alignItems="center" direction="row" spacing={1} sx={{ minWidth: 0 }}>
                   <Tooltip title={displayName}>
                     <Typography noWrap sx={{ fontWeight: 700, lineHeight: 1.2 }} variant="h3">
