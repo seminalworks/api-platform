@@ -85,7 +85,14 @@ export function AllApisPage() {
         <Box sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5, overflow: 'hidden' }}>
           <Stack
             direction="row"
-            sx={{ bgcolor: 'action.hover', color: 'text.secondary', px: 2, py: 1, typography: 'caption', fontWeight: 600 }}
+            sx={{
+              bgcolor: 'action.hover',
+              color: 'text.secondary',
+              px: 2,
+              py: 1,
+              typography: 'caption',
+              fontWeight: 600,
+            }}
           >
             <Box sx={{ flex: 3 }}>Name</Box>
             <Box sx={{ flex: 2 }}>Project</Box>
@@ -133,9 +140,13 @@ function ProjectRows({ orgHandle, project }: { orgHandle: string; project: Proje
           }}
         >
           <Box sx={{ flex: 3, fontWeight: 600, typography: 'body2' }}>{api.displayName}</Box>
-          <Box sx={{ color: 'text.secondary', flex: 2, typography: 'body2' }}>{project.displayName}</Box>
+          <Box sx={{ color: 'text.secondary', flex: 2, typography: 'body2' }}>
+            {project.displayName}
+          </Box>
           <Box sx={{ flex: 1, typography: 'body2' }}>v{api.version}</Box>
-          <Box sx={{ color: 'text.secondary', flex: 2, fontFamily: 'monospace', typography: 'body2' }}>
+          <Box
+            sx={{ color: 'text.secondary', flex: 2, fontFamily: 'monospace', typography: 'body2' }}
+          >
             {api.context}
           </Box>
         </Stack>

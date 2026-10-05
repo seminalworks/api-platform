@@ -43,8 +43,7 @@ export const useActivation = () => {
 
   const projectsQuery = useProjects();
   const projects = projectsQuery.data?.list ?? [];
-  const project =
-    projects.find((candidate) => candidate.id === record.projectId) ?? projects[0];
+  const project = projects.find((candidate) => candidate.id === record.projectId) ?? projects[0];
 
   const apisQuery = useAllRestApis({}, { projectId: project?.id });
   const apis = apisQuery.data?.list ?? [];

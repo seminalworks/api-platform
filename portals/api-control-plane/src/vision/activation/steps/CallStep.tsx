@@ -65,7 +65,10 @@ export function CallStep({
     }
   }, [openApi.data?.content]);
 
-  const invokeUrl = buildInvokeUrl(gateway?.endpoints?.[0] ?? 'https://localhost:8443', api?.context);
+  const invokeUrl = buildInvokeUrl(
+    gateway?.endpoints?.[0] ?? 'https://localhost:8443',
+    api?.context,
+  );
   const url = `${invokeUrl.replace(/\/+$/, '')}${path === '/' ? '' : path}`;
   const command = `curl -k '${url}'`;
 
@@ -121,7 +124,9 @@ export function CallStep({
         </Collapse>
       </Box>
 
-      {checking && <StatusRow tone="pending">Listening for your request on {gateway?.displayName}…</StatusRow>}
+      {checking && (
+        <StatusRow tone="pending">Listening for your request on {gateway?.displayName}…</StatusRow>
+      )}
       {failed && (
         <StatusRow tone="error">
           The gateway answered 401 Unauthorized. Your API may have security turned on: add the

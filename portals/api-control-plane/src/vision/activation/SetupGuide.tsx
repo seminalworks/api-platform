@@ -56,14 +56,27 @@ export function SetupGuide() {
   return (
     <Paper
       elevation={10}
-      sx={{ bottom: 20, overflow: 'hidden', position: 'fixed', right: 20, width: expanded ? 320 : 280, zIndex: 1300 }}
+      sx={{
+        bottom: 20,
+        overflow: 'hidden',
+        position: 'fixed',
+        right: 20,
+        width: expanded ? 320 : 280,
+        zIndex: 1300,
+      }}
     >
       <Stack direction="row" spacing={1} sx={{ alignItems: 'center', pl: 2, pr: 1, py: 1.25 }}>
         <ProgressRing value={(activation.completed / activation.total) * 100} />
         <ButtonBase
           aria-expanded={expanded}
           onClick={() => setExpanded((value) => !value)}
-          sx={{ alignItems: 'flex-start', display: 'flex', flex: 1, flexDirection: 'column', textAlign: 'left' }}
+          sx={{
+            alignItems: 'flex-start',
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            textAlign: 'left',
+          }}
         >
           <Typography sx={{ fontWeight: 700 }} variant="body2">
             Setup guide
@@ -72,7 +85,11 @@ export function SetupGuide() {
             {done ? 'All set: your API is live' : `Next: ${activation.nextStep?.label}`}
           </Typography>
         </ButtonBase>
-        <IconButton aria-label={expanded ? 'Collapse' : 'Expand'} onClick={() => setExpanded((value) => !value)} size="small">
+        <IconButton
+          aria-label={expanded ? 'Collapse' : 'Expand'}
+          onClick={() => setExpanded((value) => !value)}
+          size="small"
+        >
           {expanded ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
         </IconButton>
         <IconButton
@@ -126,7 +143,11 @@ export function SetupGuide() {
                   {step.complete && <Check size={12} strokeWidth={3} />}
                 </Box>
                 <Typography
-                  sx={{ flex: 1, fontWeight: isNext ? 600 : 400, textDecoration: step.complete ? 'line-through' : 'none' }}
+                  sx={{
+                    flex: 1,
+                    fontWeight: isNext ? 600 : 400,
+                    textDecoration: step.complete ? 'line-through' : 'none',
+                  }}
                   variant="body2"
                 >
                   {step.label}
@@ -155,7 +176,13 @@ export function SetupGuide() {
 function ProgressRing({ value }: { value: number }) {
   return (
     <Box sx={{ display: 'inline-flex', position: 'relative' }}>
-      <CircularProgress size={28} sx={{ color: 'divider', position: 'absolute' }} thickness={5} value={100} variant="determinate" />
+      <CircularProgress
+        size={28}
+        sx={{ color: 'divider', position: 'absolute' }}
+        thickness={5}
+        value={100}
+        variant="determinate"
+      />
       <CircularProgress size={28} thickness={5} value={value} variant="determinate" />
     </Box>
   );
@@ -195,15 +222,29 @@ export function ActivationHero() {
   return (
     <Paper sx={{ border: 1, borderColor: 'divider', p: 3 }} variant="outlined">
       <Typography sx={{ fontWeight: 700 }} variant="h5">
-        {activation.completed === 0 ? 'Get your first API live' : 'Continue getting your first API live'}
+        {activation.completed === 0
+          ? 'Get your first API live'
+          : 'Continue getting your first API live'}
       </Typography>
       <Stack direction="row" spacing={0.75} sx={{ alignItems: 'center', my: 2, maxWidth: 640 }}>
         {activation.steps.map((step, index) => (
-          <Stack direction="row" key={step.key} spacing={0.75} sx={{ alignItems: 'center', flex: index < activation.steps.length - 1 ? 1 : '0 0 auto' }}>
+          <Stack
+            direction="row"
+            key={step.key}
+            spacing={0.75}
+            sx={{
+              alignItems: 'center',
+              flex: index < activation.steps.length - 1 ? 1 : '0 0 auto',
+            }}
+          >
             <Box
               sx={{
                 alignItems: 'center',
-                bgcolor: step.complete ? 'primary.main' : index === nextIndex ? 'transparent' : 'action.disabledBackground',
+                bgcolor: step.complete
+                  ? 'primary.main'
+                  : index === nextIndex
+                    ? 'transparent'
+                    : 'action.disabledBackground',
                 border: index === nextIndex ? 2 : 0,
                 borderColor: 'primary.main',
                 borderRadius: '50%',
@@ -220,13 +261,21 @@ export function ActivationHero() {
               {step.complete ? <Check size={13} strokeWidth={3} /> : index + 1}
             </Box>
             {index < activation.steps.length - 1 && (
-              <Box sx={{ bgcolor: step.complete ? 'primary.main' : 'divider', borderRadius: 1, flex: 1, height: 4 }} />
+              <Box
+                sx={{
+                  bgcolor: step.complete ? 'primary.main' : 'divider',
+                  borderRadius: 1,
+                  flex: 1,
+                  height: 4,
+                }}
+              />
             )}
           </Stack>
         ))}
       </Stack>
       <Typography sx={{ mb: 2 }} variant="body1">
-        <strong>Step {nextIndex + 1}:</strong> {activation.nextStep?.label}. {activation.nextStep?.hint}.
+        <strong>Step {nextIndex + 1}:</strong> {activation.nextStep?.label}.{' '}
+        {activation.nextStep?.hint}.
       </Typography>
       <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
         <Button endIcon={<ArrowRight size={16} />} onClick={resume} variant="contained">

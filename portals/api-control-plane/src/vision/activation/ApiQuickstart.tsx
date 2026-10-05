@@ -53,7 +53,13 @@ export function ApiQuickstart({ api }: { api: RestApi }) {
     deploy: live || demo.scenarios.deploy === 'success',
     call: called,
   };
-  const firstOpen: StepKey = !done.gateway ? 'gateway' : !done.deploy ? 'deploy' : !done.call ? 'call' : 'next';
+  const firstOpen: StepKey = !done.gateway
+    ? 'gateway'
+    : !done.deploy
+      ? 'deploy'
+      : !done.call
+        ? 'call'
+        : 'next';
   const [picked, setPicked] = useState<StepKey>();
   const [collapsed, setCollapsed] = useState(false);
   // Pin the opening step once the data is in, so finishing a step shows its
@@ -100,7 +106,15 @@ export function ApiQuickstart({ api }: { api: RestApi }) {
           direction={{ xs: 'column', md: 'row' }}
           sx={{ borderColor: 'divider', borderTop: 1, minHeight: 280 }}
         >
-          <Stack spacing={0.5} sx={{ borderColor: 'divider', borderRight: { md: 1 }, flex: { md: '0 0 240px' }, p: 1.5 }}>
+          <Stack
+            spacing={0.5}
+            sx={{
+              borderColor: 'divider',
+              borderRight: { md: 1 },
+              flex: { md: '0 0 240px' },
+              p: 1.5,
+            }}
+          >
             {steps.map((step, index) => {
               const selected = step.key === active;
               return (
@@ -185,13 +199,24 @@ export function ApiQuickstart({ api }: { api: RestApi }) {
 
 function NextSteps() {
   const items = [
-    { icon: KeyRound, title: 'Secure it', body: 'Require an API key before your API goes public. Open the Policies tab.' },
-    { icon: Globe, title: 'Publish it', body: 'List it in a developer portal so consumers can discover and subscribe. Open the Publish tab.' },
+    {
+      icon: KeyRound,
+      title: 'Secure it',
+      body: 'Require an API key before your API goes public. Open the Policies tab.',
+    },
+    {
+      icon: Globe,
+      title: 'Publish it',
+      body: 'List it in a developer portal so consumers can discover and subscribe. Open the Publish tab.',
+    },
   ];
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
       {items.map(({ icon: Icon, title, body }) => (
-        <Box key={title} sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5, flex: 1, p: 2 }}>
+        <Box
+          key={title}
+          sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5, flex: 1, p: 2 }}
+        >
           <Icon size={18} />
           <Typography sx={{ fontWeight: 600, mt: 1 }} variant="body2">
             {title}

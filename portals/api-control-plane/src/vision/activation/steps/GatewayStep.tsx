@@ -30,11 +30,7 @@ import {
 } from '@wso2/oxygen-ui';
 import { Check, Server, TriangleAlert } from '@wso2/oxygen-ui-icons-react';
 
-import {
-  useCreateGateway,
-  useRotateGatewayToken,
-  type Gateway,
-} from '@/api/resources/gateways';
+import { useCreateGateway, useRotateGatewayToken, type Gateway } from '@/api/resources/gateways';
 import { CopyableCommand } from '@/pages/appShell/appShellPages/gateways/components/CopyableCommand';
 import { demoStore, stagedDelay, useDemoState } from '../../demo/demoStore';
 import { StepHeader } from '../StepHeader';
@@ -164,7 +160,11 @@ export function GatewayStep({
                   <Typography sx={{ fontWeight: 600 }} variant="body2">
                     {gateway.displayName}
                   </Typography>
-                  <Typography color="text.secondary" sx={{ fontFamily: 'monospace' }} variant="caption">
+                  <Typography
+                    color="text.secondary"
+                    sx={{ fontFamily: 'monospace' }}
+                    variant="caption"
+                  >
                     {gateway.endpoints?.[0]}
                   </Typography>
                 </Box>
@@ -201,7 +201,9 @@ export function GatewayStep({
       )}
 
       {createFailed && (
-        <Alert severity="error">We couldn’t prepare a gateway record. Reload the page to try again.</Alert>
+        <Alert severity="error">
+          We couldn’t prepare a gateway record. Reload the page to try again.
+        </Alert>
       )}
 
       {phase === 'creating' && !createFailed && (
@@ -225,14 +227,21 @@ export function GatewayStep({
             Your gateway hasn’t connected yet
           </Typography>
           <Box component="ul" sx={{ m: 0, mt: 0.5, pl: 2.5 }}>
-            <li>Is Docker running? Check with <code>docker ps</code>.</li>
+            <li>
+              Is Docker running? Check with <code>docker ps</code>.
+            </li>
             <li>Did step 3 finish? The settings file must include both lines.</li>
             <li>
               Running the gateway on another machine? Replace <code>{demo.controlPlaneHost}</code>{' '}
               with an address that machine can reach.
             </li>
           </Box>
-          <Button onClick={() => setPhase('waiting')} size="small" sx={{ mt: 1 }} variant="outlined">
+          <Button
+            onClick={() => setPhase('waiting')}
+            size="small"
+            sx={{ mt: 1 }}
+            variant="outlined"
+          >
             Check again
           </Button>
         </Alert>
@@ -337,7 +346,8 @@ function SetupCommands({
         </Stack>
       ))}
       <Typography color="text.secondary" variant="caption">
-        The token is included above and works once. Lost it? Come back here and we’ll make a new one.
+        The token is included above and works once. Lost it? Come back here and we’ll make a new
+        one.
       </Typography>
     </Stack>
   );

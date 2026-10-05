@@ -50,7 +50,14 @@ export function DemoPanel() {
         onClick={() => demoStore.set((state) => ({ ...state, panelOpen: true }))}
         size="small"
         startIcon={<WandSparkles size={14} />}
-        sx={{ bottom: 16, left: 16, opacity: 0.6, position: 'fixed', zIndex: 1400, '&:hover': { opacity: 1 } }}
+        sx={{
+          bottom: 16,
+          left: 16,
+          opacity: 0.6,
+          position: 'fixed',
+          zIndex: 1400,
+          '&:hover': { opacity: 1 },
+        }}
         variant="outlined"
       >
         Demo

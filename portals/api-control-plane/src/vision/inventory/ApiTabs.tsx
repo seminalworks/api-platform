@@ -85,7 +85,13 @@ export function ApiTabs({
           {api?.displayName ?? apiHandler}
         </Typography>
         {api?.version && <Chip label={`v${api.version}`} size="small" variant="outlined" />}
-        {api?.kind && <Chip label={api.kind === 'RestApi' ? 'REST' : api.kind} size="small" variant="outlined" />}
+        {api?.kind && (
+          <Chip
+            label={api.kind === 'RestApi' ? 'REST' : api.kind}
+            size="small"
+            variant="outlined"
+          />
+        )}
       </Stack>
       <Tabs
         onChange={(_, index: number) => navigate(tabs[index].to)}

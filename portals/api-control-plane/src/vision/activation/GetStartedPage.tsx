@@ -17,7 +17,16 @@
  */
 
 import { useEffect } from 'react';
-import { Box, Button, ButtonBase, Divider, IconButton, Stack, Tooltip, Typography } from '@wso2/oxygen-ui';
+import {
+  Box,
+  Button,
+  ButtonBase,
+  Divider,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@wso2/oxygen-ui';
 import { Check, Globe, KeyRound, Users, X } from '@wso2/oxygen-ui-icons-react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -56,7 +65,14 @@ export function GetStartedPage() {
   const exit = () => navigate(routes.organizationHome(orgHandle));
 
   return (
-    <Box sx={{ bgcolor: 'background.default', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Box
+      sx={{
+        bgcolor: 'background.default',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
       <Stack
         direction="row"
         spacing={1.5}
@@ -81,7 +97,13 @@ export function GetStartedPage() {
         <Box
           component="nav"
           aria-label="Setup steps"
-          sx={{ borderColor: 'divider', borderRight: { md: 1 }, flex: { md: '0 0 260px' }, px: 3, py: 4 }}
+          sx={{
+            borderColor: 'divider',
+            borderRight: { md: 1 },
+            flex: { md: '0 0 260px' },
+            px: 3,
+            py: 4,
+          }}
         >
           <Stack spacing={0.5}>
             {activation.steps.map((item, index) => {
@@ -128,10 +150,7 @@ export function GetStartedPage() {
 
         <Box sx={{ flex: 1, minWidth: 0, px: { xs: 2, md: 6 }, py: { xs: 3, md: 6 } }}>
           {step === 'define' && (
-            <DefineStep
-              onCreated={() => goTo('gateway')}
-              project={activation.project}
-            />
+            <DefineStep onCreated={() => goTo('gateway')} project={activation.project} />
           )}
           {step === 'gateway' && (
             <GatewayStep
@@ -146,10 +165,18 @@ export function GetStartedPage() {
             />
           )}
           {step === 'deploy' && (
-            <DeployStep api={activation.api} gateway={activation.gateway} onDeployed={() => goTo('call')} />
+            <DeployStep
+              api={activation.api}
+              gateway={activation.gateway}
+              onDeployed={() => goTo('call')}
+            />
           )}
           {step === 'call' && (
-            <CallStep api={activation.api} gateway={activation.gateway} onConfirmed={() => goTo('done')} />
+            <CallStep
+              api={activation.api}
+              gateway={activation.gateway}
+              onConfirmed={() => goTo('done')}
+            />
           )}
           {step === 'done' && (
             <DoneScreen
@@ -194,7 +221,11 @@ function RailMarker({ complete, current }: { complete: boolean; current: boolean
 function DoneScreen({ apiName, onOpenApi }: { apiName?: string; onOpenApi: () => void }) {
   const next = [
     { icon: KeyRound, title: 'Secure it', body: 'Require an API key before your API goes public.' },
-    { icon: Globe, title: 'Publish it', body: 'List it in a developer portal so others can subscribe.' },
+    {
+      icon: Globe,
+      title: 'Publish it',
+      body: 'List it in a developer portal so others can subscribe.',
+    },
     { icon: Users, title: 'Invite your team', body: 'Share the work and review changes together.' },
   ];
   return (
@@ -212,7 +243,10 @@ function DoneScreen({ apiName, onOpenApi }: { apiName?: string; onOpenApi: () =>
       </Box>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
         {next.map(({ icon: Icon, title, body }) => (
-          <Box key={title} sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5, flex: 1, p: 2 }}>
+          <Box
+            key={title}
+            sx={{ border: 1, borderColor: 'divider', borderRadius: 1.5, flex: 1, p: 2 }}
+          >
             <Icon size={18} />
             <Typography sx={{ fontWeight: 600, mt: 1 }} variant="body2">
               {title}

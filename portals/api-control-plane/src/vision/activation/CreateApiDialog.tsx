@@ -38,7 +38,11 @@ export function CreateApiDialog({ open, onClose }: { open: boolean; onClose: () 
   return (
     <Dialog fullWidth maxWidth="lg" onClose={onClose} open={open}>
       <DialogTitle sx={{ fontWeight: 700, pr: 6 }}>Create an API</DialogTitle>
-      <IconButton aria-label="Close" onClick={onClose} sx={{ position: 'absolute', right: 12, top: 12 }}>
+      <IconButton
+        aria-label="Close"
+        onClick={onClose}
+        sx={{ position: 'absolute', right: 12, top: 12 }}
+      >
         <X size={18} />
       </IconButton>
       <DialogContent dividers sx={{ p: 3 }}>

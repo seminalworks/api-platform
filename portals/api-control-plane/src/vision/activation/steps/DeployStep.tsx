@@ -83,7 +83,14 @@ export function DeployStep({
     if (!api?.id || !gateway?.id) return;
     const stamp = new Date().toISOString().slice(0, 10);
     deployApi.mutate(
-      { restApiId: api.id, body: { name: `first-deploy_${stamp}_${Date.now() % 1000}`, gatewayId: gateway.id, base: 'current' } },
+      {
+        restApiId: api.id,
+        body: {
+          name: `first-deploy_${stamp}_${Date.now() % 1000}`,
+          gatewayId: gateway.id,
+          base: 'current',
+        },
+      },
       { onError: (cause) => setError(cause.message) },
     );
   };
@@ -127,16 +134,24 @@ export function DeployStep({
 
       {status === 'idle' && (
         <Box>
-          <Button onClick={deploy} size="large" startIcon={<Rocket size={16} />} variant="contained">
+          <Button
+            onClick={deploy}
+            size="large"
+            startIcon={<Rocket size={16} />}
+            variant="contained"
+          >
             Deploy
           </Button>
         </Box>
       )}
-      {status === 'deploying' && <StatusRow tone="pending">Deploying to {gateway?.displayName}…</StatusRow>}
+      {status === 'deploying' && (
+        <StatusRow tone="pending">Deploying to {gateway?.displayName}…</StatusRow>
+      )}
       {status === 'failed' && (
         <Stack spacing={1.5}>
           <StatusRow tone="error">
-            Deployment didn’t finish. {error ?? 'The gateway rejected the configuration or went offline.'}
+            Deployment didn’t finish.{' '}
+            {error ?? 'The gateway rejected the configuration or went offline.'}
           </StatusRow>
           <Box>
             <Button onClick={deploy} variant="outlined">
@@ -155,7 +170,9 @@ export function DeployStep({
           </Box>
         </Stack>
       )}
-      {deploymentsQuery.isPending && api?.id && scenario === 'real' && <CircularProgress size={16} />}
+      {deploymentsQuery.isPending && api?.id && scenario === 'real' && (
+        <CircularProgress size={16} />
+      )}
     </Stack>
   );
 }
