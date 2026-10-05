@@ -112,6 +112,8 @@ export const routes = {
   serverError: '/server-error',
   organizations: '/organizations',
   organizationHome: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/home`,
+  getStarted: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/get-started`,
+  allApis: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/apis`,
   projects: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/projects`,
   gateways: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/gateways`,
   newGateway: (orgHandle = ':orgHandle') => `/organizations/${orgHandle}/gateways/new`,

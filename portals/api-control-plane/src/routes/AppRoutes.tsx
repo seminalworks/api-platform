@@ -17,7 +17,9 @@
  */
 
 import { lazy, type ReactNode } from 'react';
-import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes, useLocation, useParams } from 'react-router-dom';
+
+import { GetStartedPage } from '@/vision/activation/GetStartedPage';
 
 import { AuthCallbackPage } from '@/pages/auth/AuthCallbackPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
@@ -383,6 +385,16 @@ export function AppRoutes({ extensions = [] }: AppRoutesProps) {
       <Route path={routes.sessionExpired} element={<SessionExpiredPage />} />
       <Route path={routes.serverError} element={<ServerErrorPage />} />
       <Route element={<ProtectedRoute />}>
+        {/* Vision: the activation takeover renders without the app chrome. */}
+        <Route
+          element={
+            <ConsoleScopeProvider>
+              <Outlet />
+            </ConsoleScopeProvider>
+          }
+        >
+          <Route path={routes.getStarted()} element={<GetStartedPage />} />
+        </Route>
         <Route
           element={
             <ConsoleScopeProvider>
