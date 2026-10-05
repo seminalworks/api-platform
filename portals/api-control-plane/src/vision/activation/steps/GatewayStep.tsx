@@ -46,54 +46,63 @@ const POLL_MS = 3000;
 
 type Phase = 'choose' | 'creating' | 'waiting' | 'connected' | 'stalled';
 
+const FIRST_GATEWAY_ID = 'my-first-gateway';
+
 export function GatewayStep({
   gateways,
+  gatewaysLoaded,
   connectedGateways,
   refetchGateways,
   onConnected,
+  embedded = false,
 }: {
   gateways: Gateway[];
+  gatewaysLoaded: boolean;
   connectedGateways: Gateway[];
   refetchGateways: () => unknown;
   onConnected: (gatewayId: string) => void;
+  /** Rendered inside an API's quickstart card rather than the full-page flow. */
+  embedded?: boolean;
 }) {
   const demo = useDemoState();
   const scenario = demo.scenarios.gateway;
   const [phase, setPhase] = useState<Phase>(connectedGateways.length > 0 ? 'choose' : 'creating');
   const [pickedId, setPickedId] = useState(connectedGateways[0]?.id);
   const [newGatewayId, setNewGatewayId] = useState<string>();
+  const [createFailed, setCreateFailed] = useState(false);
   const createGateway = useCreateGateway();
   const creatingRef = useRef(false);
 
   // Start setup straight away when nothing is connected: the record is a
-  // detail the user shouldn't have to fill a form for.
+  // detail the user shouldn't have to fill a form for. Waits for the list so a
+  // returning user reuses their gateway instead of hitting a 409.
   useEffect(() => {
-    if (phase !== 'creating' || creatingRef.current) return;
+    if (phase !== 'creating' || !gatewaysLoaded || creatingRef.current) return;
     creatingRef.current = true;
-    const existing = gateways.find((gateway) => gateway.id === 'my-first-gateway');
-    if (existing?.id) {
-      setNewGatewayId(existing.id);
+    const adopt = (id: string) => {
+      setNewGatewayId(id);
       setPhase('waiting');
+    };
+    if (gateways.some((gateway) => gateway.id === FIRST_GATEWAY_ID)) {
+      adopt(FIRST_GATEWAY_ID);
       return;
     }
-    createGateway.mutate(
-      {
+    createGateway
+      .mutateAsync({
         displayName: 'My first gateway',
-        id: 'my-first-gateway',
+        id: FIRST_GATEWAY_ID,
         endpoints: [demo.localGatewayUrl],
         functionalityType: 'regular',
         isCritical: false,
         properties: { environment: 'development', gatewayMode: 'self-hosted' },
         version: '1.0',
-      },
-      {
-        onSuccess: (gateway) => {
-          setNewGatewayId(gateway.id);
-          setPhase('waiting');
-        },
-      },
-    );
-  }, [phase, gateways, createGateway]);
+      })
+      .then((gateway) => adopt(gateway.id ?? FIRST_GATEWAY_ID))
+      .catch((cause: { status?: number }) => {
+        if (cause?.status === 409) adopt(FIRST_GATEWAY_ID);
+        else setCreateFailed(true);
+      });
+  }, [phase, gatewaysLoaded, gateways, createGateway, demo.localGatewayUrl]);
 
   // Watch for the new gateway to come online (or stage it in demo mode).
   useEffect(() => {
@@ -123,11 +132,13 @@ export function GatewayStep({
   if (phase === 'choose') {
     return (
       <Stack spacing={3} sx={{ maxWidth: 620 }}>
-        <StepHeader
-          eyebrow="Step 2"
-          title="Choose where your API runs"
-          subtitle="You already have a connected gateway. Use it, or set up another."
-        />
+        {!embedded && (
+          <StepHeader
+            eyebrow="Step 2"
+            title="Choose where your API runs"
+            subtitle="You already have a connected gateway. Use it, or set up another."
+          />
+        )}
         <Stack spacing={1.25}>
           {connectedGateways.map((gateway) => {
             const selected = gateway.id === pickedId;
@@ -181,13 +192,19 @@ export function GatewayStep({
 
   return (
     <Stack spacing={3} sx={{ maxWidth: 720 }}>
-      <StepHeader
-        eyebrow="Step 2"
-        title="Run a gateway on your machine"
-        subtitle="Your gateway is the runtime that serves API traffic. Paste these into a terminal; this page updates when it connects."
-      />
+      {!embedded && (
+        <StepHeader
+          eyebrow="Step 2"
+          title="Run a gateway on your machine"
+          subtitle="Your gateway is the runtime that serves API traffic. Paste these into a terminal; this page updates when it connects."
+        />
+      )}
 
-      {phase === 'creating' && (
+      {createFailed && (
+        <Alert severity="error">We couldn’t prepare a gateway record. Reload the page to try again.</Alert>
+      )}
+
+      {phase === 'creating' && !createFailed && (
         <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
           <CircularProgress size={18} />
           <Typography variant="body2">Preparing your gateway…</Typography>
@@ -255,13 +272,18 @@ function SetupCommands({
   controlPlaneHost: string;
 }) {
   const rotate = useRotateGatewayToken(gatewayId);
-  const [token, setToken] = useState<string>();
   const requested = useRef(false);
+  const [token, setToken] = useState<string>();
 
+  // An awaited promise, not per-call callbacks: StrictMode's double mount can
+  // drop those, leaving the token stuck on "generating".
   useEffect(() => {
     if (requested.current) return;
     requested.current = true;
-    rotate.mutate(undefined, { onSuccess: (result) => setToken(result.token) });
+    rotate
+      .mutateAsync()
+      .then((result) => setToken(result.token))
+      .catch(() => undefined);
   }, [rotate]);
 
   const steps = [
@@ -275,7 +297,7 @@ function SetupCommands({
       code:
         `cat >> api-platform.env << 'EOF'\n` +
         `APIP_GW_CONTROLLER_CONTROLPLANE_HOST=${controlPlaneHost}\n` +
-        `APIP_GW_CONTROLLER_CONTROLPLANE_TOKEN=${token ?? '…generating…'}\n` +
+        `APIP_GW_CONTROLLER_CONTROLPLANE_TOKEN=${token ?? (rotate.isError ? '<could not generate — reload to retry>' : '…generating…')}\n` +
         'EOF',
     },
     { title: 'Start it', code: 'docker compose up' },

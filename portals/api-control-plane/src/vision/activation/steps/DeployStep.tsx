@@ -33,10 +33,12 @@ export function DeployStep({
   api,
   gateway,
   onDeployed,
+  embedded = false,
 }: {
   api?: RestApi;
   gateway?: Gateway;
   onDeployed: () => void;
+  embedded?: boolean;
 }) {
   const demo = useDemoState();
   const scenario = demo.scenarios.deploy;
@@ -88,11 +90,13 @@ export function DeployStep({
 
   return (
     <Stack spacing={3} sx={{ maxWidth: 620 }}>
-      <StepHeader
-        eyebrow="Step 3"
-        title="Deploy your API"
-        subtitle="Send your API’s configuration to the gateway so it starts serving requests."
-      />
+      {!embedded && (
+        <StepHeader
+          eyebrow="Step 3"
+          title="Deploy your API"
+          subtitle="Send your API’s configuration to the gateway so it starts serving requests."
+        />
+      )}
 
       <Stack
         direction="row"

@@ -41,10 +41,12 @@ export function CallStep({
   api,
   gateway,
   onConfirmed,
+  embedded = false,
 }: {
   api?: RestApi;
   gateway?: Gateway;
   onConfirmed: () => void;
+  embedded?: boolean;
 }) {
   const demo = useDemoState();
   const scenario = demo.scenarios.firstCall;
@@ -87,11 +89,13 @@ export function CallStep({
 
   return (
     <Stack spacing={3} sx={{ maxWidth: 720 }}>
-      <StepHeader
-        eyebrow="Step 4"
-        title="Make your first call"
-        subtitle="Your API is live. Call it through the gateway and see a real response."
-      />
+      {!embedded && (
+        <StepHeader
+          eyebrow="Step 4"
+          title="Make your first call"
+          subtitle="Your API is live. Call it through the gateway and see a real response."
+        />
+      )}
 
       <Stack spacing={1}>
         <CopyableCommand code={command} />

@@ -107,6 +107,7 @@ export const useActivation = () => {
     total: steps.length,
     nextStep,
     isLoading: projectsQuery.isPending || gatewaysQuery.isPending,
+    gatewaysLoaded: gatewaysQuery.isSuccess,
     refetchGateways: gatewaysQuery.refetch,
   };
 };

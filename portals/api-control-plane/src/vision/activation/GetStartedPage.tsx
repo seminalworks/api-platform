@@ -137,6 +137,7 @@ export function GetStartedPage() {
             <GatewayStep
               connectedGateways={activation.connectedGateways}
               gateways={activation.gateways}
+              gatewaysLoaded={activation.gatewaysLoaded}
               onConnected={(gatewayId) => {
                 demoStore.setActivation({ gatewayId });
                 goTo('deploy');
