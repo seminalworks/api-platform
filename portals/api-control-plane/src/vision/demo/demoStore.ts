@@ -44,6 +44,8 @@ export type DemoState = {
   activation: ActivationRecord;
   /** What a Docker gateway on this machine dials to reach the control plane. */
   controlPlaneHost: string;
+  /** Where a gateway started on this machine serves traffic. */
+  localGatewayUrl: string;
 };
 
 const STORAGE_KEY = 'vision.demo.v1';
@@ -53,7 +55,8 @@ const DEFAULT_STATE: DemoState = {
   wizardVariant: 'takeover',
   scenarios: { gateway: 'real', deploy: 'real', firstCall: 'real' },
   activation: {},
-  controlPlaneHost: 'host.docker.internal:9243',
+  controlPlaneHost: 'host.docker.internal:39243',
+  localGatewayUrl: 'https://localhost:38443',
 };
 
 const read = (): DemoState => {

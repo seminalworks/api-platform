@@ -42,7 +42,6 @@ import { StepHeader } from '../StepHeader';
 /** The newest published API gateway release; the console's own link 404s. */
 const GATEWAY_RELEASE = '2026.09.24';
 const DIST = `wso2apip-api-gateway-${GATEWAY_RELEASE}`;
-const LOCAL_GATEWAY_URL = 'https://localhost:8443';
 const POLL_MS = 3000;
 
 type Phase = 'choose' | 'creating' | 'waiting' | 'connected' | 'stalled';
@@ -81,7 +80,7 @@ export function GatewayStep({
       {
         displayName: 'My first gateway',
         id: 'my-first-gateway',
-        endpoints: [LOCAL_GATEWAY_URL],
+        endpoints: [demo.localGatewayUrl],
         functionalityType: 'regular',
         isCritical: false,
         properties: { environment: 'development', gatewayMode: 'self-hosted' },

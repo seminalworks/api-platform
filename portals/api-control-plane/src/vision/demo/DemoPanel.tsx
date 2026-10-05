@@ -130,6 +130,17 @@ export function DemoPanel() {
         value={demo.controlPlaneHost}
       />
 
+      <TextField
+        fullWidth
+        label="Local gateway URL"
+        onChange={(event) =>
+          demoStore.set((state) => ({ ...state, localGatewayUrl: event.target.value }))
+        }
+        size="small"
+        sx={{ mt: 1.5 }}
+        value={demo.localGatewayUrl}
+      />
+
       <Button
         fullWidth
         onClick={() => demoStore.resetActivation()}
