@@ -16,7 +16,7 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, CircularProgress, Stack, Typography } from '@wso2/oxygen-ui';
 import { ArrowRight, Rocket, Server } from '@wso2/oxygen-ui-icons-react';
 
@@ -60,6 +60,15 @@ export function DeployStep({
           : realStatus === 'FAILED' || error
             ? 'failed'
             : 'idle';
+
+  // The shared deployments query stops polling after a few tries; keep
+  // watching here until the deployment settles.
+  const { refetch } = deploymentsQuery;
+  useEffect(() => {
+    if (scenario !== 'real' || status !== 'deploying') return;
+    const timer = window.setInterval(() => void refetch(), 2000);
+    return () => window.clearInterval(timer);
+  }, [scenario, status, refetch]);
 
   const deploy = async () => {
     setError(undefined);

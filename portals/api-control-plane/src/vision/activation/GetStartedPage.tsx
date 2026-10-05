@@ -23,6 +23,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { routes } from '@/routes/paths';
 import { DemoPanel } from '../demo/DemoPanel';
+import { demoStore } from '../demo/demoStore';
 import { type ActivationStepKey, useActivation } from './useActivation';
 import { CallStep } from './steps/CallStep';
 import { DefineStep } from './steps/DefineStep';
@@ -136,7 +137,10 @@ export function GetStartedPage() {
             <GatewayStep
               connectedGateways={activation.connectedGateways}
               gateways={activation.gateways}
-              onConnected={() => goTo('deploy')}
+              onConnected={(gatewayId) => {
+                demoStore.setActivation({ gatewayId });
+                goTo('deploy');
+              }}
               refetchGateways={activation.refetchGateways}
             />
           )}
