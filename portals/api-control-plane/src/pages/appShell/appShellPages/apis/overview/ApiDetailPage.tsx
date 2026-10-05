@@ -109,6 +109,7 @@ const messages = defineMessages({
 });
 
 /** Edge of the square kind tile, the monogram inside it, and the fallback icon. */
+const SHOW_LEGACY_STEPPER = false as boolean;
 const AVATAR_SIZE = 72;
 const AVATAR_FONT_SIZE = 32;
 const AVATAR_ICON_SIZE = 32;
@@ -375,7 +376,8 @@ function ApiDetailPageContent() {
             </Can>
           </Stack>
         </Box>
-        <ProgressBanner api={api} deployed={deployedGateways.length > 0} />
+        {/* Vision: the floating setup guide replaces the per-API stepper. */}
+        {SHOW_LEGACY_STEPPER && <ProgressBanner api={api} deployed={deployedGateways.length > 0} />}
       </Card>
 
       <OverviewTab

@@ -64,7 +64,8 @@ export function AppPage({
   ...pageContentProps
 }: AppPageProps) {
   const breadcrumbs = useScopeBreadcrumbs();
-  const showBreadcrumbs = !hideBreadcrumbs && breadcrumbs.length > 1;
+  // Vision: the sidebar, API breadcrumb and tabs already say where you are.
+  const showBreadcrumbs = false && !hideBreadcrumbs && breadcrumbs.length > 1;
 
   return (
     <PageContent

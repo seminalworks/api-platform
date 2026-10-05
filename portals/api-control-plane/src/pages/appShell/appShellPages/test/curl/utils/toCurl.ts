@@ -121,9 +121,13 @@ const bodyFlags = (request: ConsoleRequest, options: ToCurlOptions): string[] =>
  * command still says what it does after someone edits the URL.
  */
 export const toCurl = (request: ConsoleRequest, options: ToCurlOptions): string => {
+  // Vision: a wildcard route is a pattern, not a path to call; and a local
+  // gateway's self-signed certificate needs -k or the command fails as copied.
+  const url = buildRequestUrl(request, options).replace(/\/\*(?=$|[?#])/, '/');
+  const insecure = /^https:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(url) ? ' -k' : '';
   const lines = [
-    `curl -X ${request.method} \\`,
-    `  ${shellQuote(buildRequestUrl(request, options))} \\`,
+    `curl${insecure} -X ${request.method} \\`,
+    `  ${shellQuote(url)} \\`,
   ];
 
   const headers = activeRows(request.headers);
