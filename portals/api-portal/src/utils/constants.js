@@ -204,6 +204,9 @@ module.exports = {
             '**/api-keys?**',
             '**/subscriptions',
             '/*/settings',
+            // The settings page's view-scoped LLM instruction endpoints (settingsRoute.js).
+            '/*/views/*/llms-config',
+            '/*/views/*/llms.txt/preview',
         ],
         SYSTEM_AUTHORIZED_PAGES: [
             '**/applications',
@@ -212,6 +215,9 @@ module.exports = {
             '**/api-keys?**',
             '**/subscriptions',
             '/*/settings',
+            // The settings page's view-scoped LLM instruction endpoints (settingsRoute.js).
+            '/*/views/*/llms-config',
+            '/*/views/*/llms.txt/preview',
         ],
     },
     ROLES: {
@@ -338,6 +344,14 @@ module.exports = {
         KEY_MANAGER_DELETE_ERROR: "Error while deleting key manager",
         KEY_MANAGER_RETRIEVE_ERROR: "Error while retrieving key manager",
         KEY_MANAGER_NOT_FOUND: "Key manager not found",
+        OAUTH2_KEY_CREATE_ERROR: "Error while generating OAuth2 key",
+        OAUTH2_KEY_UPDATE_ERROR: "Error while updating OAuth2 key",
+        OAUTH2_KEY_DELETE_ERROR: "Error while deleting OAuth2 key",
+        OAUTH2_KEY_RETRIEVE_ERROR: "Error while retrieving OAuth2 key",
+        OAUTH2_KEY_NOT_FOUND: "OAuth2 key not found",
+        APPLICATION_NOT_FOUND: "Application not found",
+        OAUTH2_KEY_OPERATION_UNSUPPORTED: "The key manager does not support this operation",
+        OAUTH2_KEY_TOKEN_ERROR: "Error while generating the access token",
         WEBHOOK_SUBSCRIBER_CREATE_ERROR: "Error while creating webhook subscriber",
         WEBHOOK_SUBSCRIBER_UPDATE_ERROR: "Error while updating webhook subscriber",
         WEBHOOK_SUBSCRIBER_DELETE_ERROR: "Error while deleting webhook subscriber",
